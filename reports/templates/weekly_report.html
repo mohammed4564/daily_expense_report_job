@@ -1,0 +1,90 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Weekly Expense Report</title>
+</head>
+
+<body style="font-family: Arial, sans-serif; color: #333;">
+
+    <h2>Weekly Expense Report</h2>
+
+    <p>Hello {{ user.full_name or user.username }},</p>
+
+    <p>
+        Here is your expense summary for
+        <strong>{{ start_date }}</strong> to
+        <strong>{{ end_date }}</strong>.
+    </p>
+
+    <h3>Expense Summary</h3>
+
+    <table cellpadding="8" cellspacing="0" border="1">
+        <tr>
+            <th>Total Expenses</th>
+            <td>{{ user.total_expenses }}</td>
+        </tr>
+        <tr>
+            <th>Total Transactions</th>
+            <td>{{ user.total_transactions }}</td>
+        </tr>
+        <tr>
+            <th>Average Transaction</th>
+            <td>{{ user.average_transaction }}</td>
+        </tr>
+        <tr>
+            <th>Highest Spending Category</th>
+            <td>
+                {% if user.highest_category %}
+                    {{ user.highest_category.category }}
+                    ({{ user.highest_category.amount }})
+                {% else %}
+                    No expenses
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+
+    <h3>Category-wise Expenses</h3>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Category</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for category, amount in user.category_totals.items() %}
+        <tr>
+            <td>{{ category }}</td>
+            <td>{{ amount }}</td>
+        </tr>
+        {% else %}
+        <tr>
+            <td colspan="2">No expenses this week.</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <h3>Daily Expenses</h3>
+
+    <table border="1" cellpadding="8" cellspacing="0">
+        <tr>
+            <th>Date</th>
+            <th>Amount</th>
+        </tr>
+
+        {% for expense_date, amount in user.daily_totals.items() %}
+        <tr>
+            <td>{{ expense_date }}</td>
+            <td>{{ amount }}</td>
+        </tr>
+        {% endfor %}
+    </table>
+
+    <p>
+        Thank you for using Daily Expense Tracker!
+    </p>
+
+</body>
+</html>
